@@ -1,4 +1,5 @@
 mas sma {
+
     agent auctioneer : auctioneer.asl
 
     agent alice : bidder.asl {
@@ -9,5 +10,9 @@ mas sma {
     }
     agent carol : bidder.asl {
         beliefs: max_price(95)
+    }
+
+    workspace w {
+        artifact auction_house: auction.AuctionHouse("how_to_get_a_top_grade_in_SMA.pdf", 50, 5)
     }
 }

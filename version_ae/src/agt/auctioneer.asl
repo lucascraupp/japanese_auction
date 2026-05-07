@@ -1,21 +1,28 @@
 // ============================================================
-//  Auctioneer (versão AE — coordena o leilão via artefato)
+//  Auctioneer (versão AE — opera o artefato AuctionHouse já
+//  pré-instanciado pelo ambiente, no workspace `w`).
 // ============================================================
-item("how_to_get_a_top_grade_in_SMA.pdf").
-initial_price(50).
-price_step(5).
 registration_window(3000).
 round_timeout(2000).
 
 !start.
 
-+!start : item(I) & initial_price(P0) & price_step(S) & registration_window(W)
-   <- makeArtifact("auction_house", "auction.AuctionHouse", [I, P0, S], ArtId);
-      focus(ArtId);
-      .print("Artefato AuctionHouse criado para item ", I, " a R$ ", P0);
++!start : registration_window(W)
+   <- !attach;
+      .print("Operando o artefato AuctionHouse.");
       openRegistration;
       .wait(W);
       !close_registration.
+
++!attach
+   <- .wait(300);
+      joinWorkspace("w", WspId);
+      lookupArtifact("auction_house", AID);
+      focus(AID).
+
+-!attach
+   <- .wait(300);
+      !attach.
 
 +!close_registration
    <- closeRegistration(N, _Bidders);
@@ -41,7 +48,6 @@ round_timeout(2000).
 +!handle(_, "tie", Winner) : current_price(P)
    <- declareWinner(Winner, P).
 
-// observa propriedade do artefato para confirmar
 +winner(B, P)
    <- .print("Auctioneer confirmou vencedor: ", B, " a R$ ", P).
 

@@ -1,5 +1,5 @@
 // ============================================================
-//  Bidder (versão AE — interage via artefato)
+//  Bidder (versão AE — interage via artefato AuctionHouse).
 //  Crença max_price/1 é definida no .jcm para cada instância.
 // ============================================================
 
@@ -10,9 +10,9 @@
       +participating;
       !attach.
 
-// busca e foca o artefato; tenta de novo se ainda não existe
 +!attach
    <- .wait(300);
+      joinWorkspace("w", WspId);
       lookupArtifact("auction_house", AID);
       focus(AID).
 
