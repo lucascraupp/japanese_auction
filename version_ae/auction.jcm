@@ -1,0 +1,13 @@
+mas sma {
+    agent auctioneer : auctioneer.asl
+
+    agent alice : bidder.asl {
+        beliefs: max_price(70)
+    }
+    agent bob : bidder.asl {
+        beliefs: max_price(85)
+    }
+    agent carol : bidder.asl {
+        beliefs: max_price(95)
+    }
+}
