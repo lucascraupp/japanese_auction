@@ -32,7 +32,7 @@ Em `version_a/` ficam todos no `.asl` do leiloeiro. Em `version_ae/` o preço in
 ```
 version_a/
   src/agt/auction_house.asl     # leiloeiro (mensagens)
-  src/agt/<bidders>.asl         # licitantes
+  src/agt/licitantes.asl         # licitantes
 version_ae/
   src/env/auction/AuctionHouse.java   # artefato CArtAgO compartilhado
   src/agt/auctioneer.asl              # leiloeiro: opera o artefato
