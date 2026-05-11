@@ -1,3 +1,11 @@
 mas sma {
-    agent auction_house : auction_house.asl
+    agent auction_house : auction_house.asl {
+        beliefs: item("how_to_get_a_top_grade_in_SMA.pdf"),
+                 initial_price(50),
+                 price_step(5),
+                 registration_window(3000),
+                 round_timeout(2000),
+                 licitantes(100),
+                 variation_max_price(10),
+    }
 }

@@ -1,12 +1,6 @@
-item("how_to_get_a_top_grade_in_SMA.pdf").
-initial_price(50).
-price_step(5).
-registration_window(3000).
-round_timeout(2000).
+!start_agents.
 
-// ---------- Disparo automático ----------
-!start.
-
+// ---------- Disparo automático após criação dos agentes licitantes ----------
 +!start[source(self)] : initial_price(P0) & item(I) & registration_window(W)
    <- +current_price(P0);
       .print("Abrindo leilão de ", I, " a R$: ", P0);
@@ -14,19 +8,19 @@ round_timeout(2000).
       .wait(W);
       !close_registration.
 
-+register(_)[source(B)]
++register[source(B)]
    <- .print("Registrado: ", B).
 
 +stay(I, P, R)[source(B)]
    <- +stayed_in_round(B, R);
       -stay(I, P, R)[source(B)].
 
-+!close_registration[source(self)] : not register(_)
++!close_registration[source(self)] : not register
    <- .print("Nenhum inscrito");
       !abort_auction(no_bidders).
 
 +!close_registration[source(self)]
-   <- .findall(B, register(_)[source(B)], L);
+   <- .findall(B, register[source(B)], L);
       .print("Inscritos: ", L);
       for (.member(B, L)) { 
          +active(B); 
@@ -47,7 +41,7 @@ round_timeout(2000).
       }
       .findall(B, active(B), Stayers);
       .length(Stayers, K);
-      .print("Rodada ", R, " encerrada. Stays: ", Stayers);
+      .print("Rodada ", R, " encerrada. Permaneceram ", K, " licitantes: ", Stayers);
       !decide(R, K, Stayers).
 
 +!decide(R, K, Stayers)[source(self)] : K >= 2 & current_price(P) & price_step(S)
@@ -82,3 +76,27 @@ round_timeout(2000).
 +!abort_auction(Reason)[source(self)] : item(I)
    <- .broadcast(tell, auction_failed(I, Reason));
       .print("Leilão abortado: ", Reason).
+
+
+
+// ---------- Criação dos agentes licitantes ----------
+
++!start_agents : licitantes(N) 
+   <- .print("Criando ", N, " licitantes...");
+      !create_licitante(N);
+      .broadcast(achieve, start);
+      !start.
+
++!create_licitante(N): N > 0
+   <- !create_licitante(N-1);
+      ?initial_price(P0);
+      ?variation_max_price(V);
+      Max = P0 + math.floor(math.random(V));
+      ?item(I);
+      .concat("licitante_", N, Name);
+      .create_agent(Name, "licitantes.asl");
+      .send(Name, tell, maximum_price(Max));
+      .send(Name, tell, item(I));
+      .print("Criando licitante para comprar ", I, " com limite R$ ", Max).
+
++!create_licitante(0).
