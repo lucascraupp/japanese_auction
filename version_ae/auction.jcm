@@ -1,15 +1,7 @@
 mas sma {
 
-    agent auctioneer : auctioneer.asl
-
-    agent alice : bidder.asl {
-        beliefs: max_price(70)
-    }
-    agent bob : bidder.asl {
-        beliefs: max_price(85)
-    }
-    agent carol : bidder.asl {
-        beliefs: max_price(95)
+    agent auctioneer : auctioneer.asl {
+        beliefs: bidder(100),variation_max_price(200),registration_window(1000),round_timeout(500)
     }
 
     workspace w {

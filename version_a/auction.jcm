@@ -5,7 +5,7 @@ mas sma {
                  price_step(5),
                  registration_window(3000),
                  round_timeout(2000),
-                 licitantes(100),
-                 variation_max_price(10),
+                 licitantes(5),
+                 variation_max_price(50),
     }
 }

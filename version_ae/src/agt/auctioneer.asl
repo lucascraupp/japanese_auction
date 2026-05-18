@@ -2,14 +2,11 @@
 //  Auctioneer (versão AE — opera o artefato AuctionHouse já
 //  pré-instanciado pelo ambiente, no workspace `w`).
 // ============================================================
-registration_window(3000).
-round_timeout(2000).
 
-!start.
+!start_agents.
 
 +!start : registration_window(W)
-   <- !attach;
-      .print("Operando o artefato AuctionHouse.");
+   <- .print("Operando o artefato AuctionHouse.");
       openRegistration;
       .wait(W);
       !close_registration.
@@ -48,8 +45,30 @@ round_timeout(2000).
 +!handle(_, "tie", Winner) : current_price(P)
    <- declareWinner(Winner, P).
 
-+winner(B, P)
-   <- .print("Auctioneer confirmou vencedor: ", B, " a R$ ", P).
++winner(B, P).
 
 +phase("aborted")
    <- .print("Auctioneer notado: leilão abortado.").
+
+
+// ---------- Criação dos agentes bidder ----------
+
++!start_agents : bidder(N) 
+   <- !attach;
+      .print("Criando ", N, " bidders...");
+      ?current_price(P0);
+      .print("Preço inicial: R$ ", P0);
+      !create_bidder(N, P0);
+      .broadcast(achieve, start);
+      !start.
+
++!create_bidder(N, P0): N > 0
+   <- !create_bidder(N-1, P0);
+      ?variation_max_price(V);
+      Max = P0 + math.floor(math.random(V));
+      .concat("bidder_", N, Name);
+      .create_agent(Name, "bidder.asl");
+      .send(Name, tell, max_price(Max));
+      .print("Criando bidder com limite de R$ ", Max).
+
++!create_bidder(0, P0).

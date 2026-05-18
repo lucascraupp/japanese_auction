@@ -78,7 +78,8 @@ public class AuctionHouse extends Artifact {
         lastActive.addAll(registered);
         n.set(registered.size());
         bidders.set(registered.toArray());
-        log("Inscritos: " + registered);
+        int i = registered.size();
+        log(i + " inscritos: " + registered);
     }
 
     @OPERATION
@@ -124,7 +125,7 @@ public class AuctionHouse extends Artifact {
         // quem não confirmou stay sai
         active.retainAll(stayedThisRound);
         int k = active.size();
-        log("Rodada encerrada. Ficaram: " + active);
+        log("Rodada encerrada. Ficaram " + k + ": " + active);
         if (k >= 2) {
             lastActive.clear();
             lastActive.addAll(active);

@@ -23,25 +23,24 @@
 // ---------- Reações às propriedades observáveis ----------
 
 +phase("registration")
-   <- register;
-      .print("registrado.").
+   <- register.
+      //.print("registrado.").
 
 +round(R) : R > 0 & participating & current_price(P) & max_price(M) & P <= M
-   <- .print("R", R, " preço R$ ", P, " <= teto R$ ", M, " -> STAY");
+   <- //.print("R", R, " preço R$ ", P, " <= teto R$ ", M, " -> STAY");
       stay.
 
 +round(R) : R > 0 & participating & current_price(P) & max_price(M) & P > M
-   <- .print("R", R, " preço R$ ", P, " > teto R$ ", M, " -> LEAVE");
+   <- //.print("R", R, " preço R$ ", P, " > teto R$ ", M, " -> LEAVE");
       -participating;
       leave.
 
 // ---------- Resultado ----------
 
 +winner(Me, P) : .my_name(Me)
-   <- .print("VENCI! Pago R$ ", P, " pelo item.").
+   <- .print("Venci o leilão! Comprei por R$ ", P, ".").
 
-+winner(B, P) : .my_name(Me) & B \== Me
-   <- .print("Vencedor foi ", B, " a R$ ", P, ".").
++winner(B, P) : .my_name(Me) & B \== Me.
 
 +phase("aborted")
    <- .print("Leilão abortado.").

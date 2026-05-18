@@ -75,3 +75,7 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,visualstudiocode,gradle
+
+# Ignore Trial files
+version_*/trial_*.txt
+version_*/trial.bash
